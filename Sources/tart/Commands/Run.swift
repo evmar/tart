@@ -274,6 +274,9 @@ struct Run: AsyncParsableCommand {
     // "tart stop" support
     let sigintSrc = DispatchSource.makeSignalSource(signal: SIGINT)
     sigintSrc.setEventHandler {
+      if (vm?.virtualMachine.canRequestStop == true) {
+        try! vm?.virtualMachine.requestStop()
+      }
       task.cancel()
     }
     sigintSrc.activate()
